@@ -1,3 +1,6 @@
+using CinemaReservationSystem.Models;
+using CinemaReservationSystem.Repos;
+
 namespace CinemaReservationSystem
 {
     public class Program
@@ -8,6 +11,12 @@ namespace CinemaReservationSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            var connectionString =
+            builder.Configuration.GetConnectionString("DefaultConnection")
+                   ?? throw new InvalidOperationException("Connection string"
+                  + "'DefaultConnection' not found.");
+
+            builder.Services.Config(connectionString);
 
             var app = builder.Build();
 
