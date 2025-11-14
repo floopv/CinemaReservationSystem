@@ -1,5 +1,6 @@
 ﻿using CinemaReservationSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using CinemaReservationSystem.ViewModel;
 
 namespace CinemaReservationSystem.DataConnection
 {
@@ -38,5 +39,6 @@ namespace CinemaReservationSystem.DataConnection
             modelBuilder.Entity<Movie>().
                 HasKey(m => m.Id);
         }
+        public DbSet<CinemaReservationSystem.ViewModel.CreateCategoryVM> CreateCategoryVM { get; set; } = default!;
     }
 }
