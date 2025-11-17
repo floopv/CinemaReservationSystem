@@ -40,5 +40,7 @@ namespace CinemaReservationSystem.DataConnection
                 HasKey(m => m.Id);
         }
         public DbSet<CinemaReservationSystem.ViewModel.CreateCategoryVM> CreateCategoryVM { get; set; } = default!;
+        public DbSet<CinemaReservationSystem.ViewModel.UpdateCategoryVM> UpdateCategoryVM { get; set; } = default!;
+        public DbSet<CinemaReservationSystem.ViewModel.CreateCinemaVM> CreateCinemaVM { get; set; } = default!;
     }
 }

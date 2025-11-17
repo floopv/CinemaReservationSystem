@@ -42,5 +42,45 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
+        public async Task<IActionResult> Update (int id)
+        {
+            var category =  await _categoryRepository.GetOneAsync(c => c.Id == id);
+            if (category is null)
+            {
+                return NotFound();
+            }
+            var updateCategoryVM = category.Adapt<UpdateCategoryVM>();
+            return View(updateCategoryVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateCategoryVM updateCategoryVM)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "There were some errors. Please correct them and try again.";
+                return View(updateCategoryVM);
+            }
+            var category = await _categoryRepository.GetOneAsync(c => c.Id == updateCategoryVM.Id);
+            if (category is null)
+            {
+                return NotFound();
+            }
+            category = updateCategoryVM.Adapt(category);
+            _categoryRepository.Update(category);
+            await _categoryRepository.CommitAsync();
+            return RedirectToAction(nameof(Index)) ;
+        }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await _categoryRepository.GetOneAsync(c => c.Id == id);
+            if (category is null)
+            {
+                return NotFound();
+            }
+            _categoryRepository.Delete(category);
+            await _categoryRepository.CommitAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

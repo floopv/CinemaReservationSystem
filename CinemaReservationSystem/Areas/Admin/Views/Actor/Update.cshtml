@@ -1,0 +1,74 @@
+﻿@model CinemaReservationSystem.ViewModel.UpdateActorVM
+
+@* @{
+    ViewData["Title"] = "Update";
+} *@
+
+<h1>Update</h1>
+
+<h4>UpdateActorVM</h4>
+<hr />
+<div class="container">
+    <div class="col-md-12">
+        <form asp-action="Update" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bio" class="control-label"></label>
+                <input asp-for="Bio" class="form-control" />
+                <span asp-validation-for="Bio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImgFile" class="control-label"></label>
+                <input asp-for="ImgFile" class="form-control" type="file" accept="image/*" onchange="previewImage(event)" />
+                <span asp-validation-for="ImgFile" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <img id="preview"
+                     src="~/Imgs/Actors/@Model.Img"
+                     alt="Current Image"
+                     style="max-width: 200px; border:1px solid #ccc; padding:5px; border-radius:10px;" />
+            </div>
+            @* <div class="form-group form-check mt-3">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
+                </label>
+            </div> *@
+
+            <div class="form-group mt-3 mb-3">
+                <input type="hidden" asp-for="Img" />
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById("preview");
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result; // الصورة الجديدة
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
