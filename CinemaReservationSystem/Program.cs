@@ -37,7 +37,7 @@ namespace CinemaReservationSystem
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{area=Admin}/{controller=Category}/{action=Index}/{id?}");
+                pattern: "{area=Admin}/{controller=Movie}/{action=Index}/{id?}");
 
             app.Run();
         }

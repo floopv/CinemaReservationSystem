@@ -14,7 +14,7 @@ namespace CinemaReservationSystem.DataConnection
         public DbSet<Category> Categories { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<MovieSubImg> MovieSubImgs { get; set; }
-
+        public DbSet<ActorMovie> ActorMovie { get; set; }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder.UseSqlServer ("Data Source=FLOOPV\\SQLEXPRESS;initial catalog = CinemaReservationSystem ;Integrated Security=True;" +
@@ -38,9 +38,17 @@ namespace CinemaReservationSystem.DataConnection
                 });
             modelBuilder.Entity<Movie>().
                 HasKey(m => m.Id);
+            modelBuilder.Entity<ActorMovie>()
+       .HasKey(ma => new { ma.MoviesId, ma.ActorsId });
+            modelBuilder.Entity<ActorMovie>()
+       .HasOne(am => am.Movie)
+       .WithMany(m => m.ActorMovies)
+       .HasForeignKey(am => am.MoviesId);
+
+            modelBuilder.Entity<ActorMovie>()
+                .HasOne(am => am.Actor)
+                .WithMany(a => a.ActorMovies)
+                .HasForeignKey(am => am.ActorsId);
         }
-        public DbSet<CinemaReservationSystem.ViewModel.CreateCategoryVM> CreateCategoryVM { get; set; } = default!;
-        public DbSet<CinemaReservationSystem.ViewModel.UpdateCategoryVM> UpdateCategoryVM { get; set; } = default!;
-        public DbSet<CinemaReservationSystem.ViewModel.CreateCinemaVM> CreateCinemaVM { get; set; } = default!;
     }
 }

@@ -34,7 +34,7 @@ namespace CinemaReservationSystem.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("ActorMovie");
+                    b.ToTable("ActorMovie", (string)null);
                 });
 
             modelBuilder.Entity("CinemaReservationSystem.Models.Actor", b =>
@@ -59,7 +59,7 @@ namespace CinemaReservationSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors");
+                    b.ToTable("Actors", (string)null);
                 });
 
             modelBuilder.Entity("CinemaReservationSystem.Models.Category", b =>
@@ -83,7 +83,7 @@ namespace CinemaReservationSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("CinemaReservationSystem.Models.Cinema", b =>
@@ -111,7 +111,7 @@ namespace CinemaReservationSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cinemas");
+                    b.ToTable("Cinemas", (string)null);
                 });
 
             modelBuilder.Entity("CinemaReservationSystem.Models.Movie", b =>
@@ -155,7 +155,7 @@ namespace CinemaReservationSystem.Migrations
 
                     b.HasIndex("CinemaId");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("CinemaReservationSystem.Models.MovieSubImg", b =>
@@ -168,7 +168,7 @@ namespace CinemaReservationSystem.Migrations
 
                     b.HasKey("MovieId", "SubImg");
 
-                    b.ToTable("MovieSubImgs");
+                    b.ToTable("MovieSubImgs", (string)null);
                 });
 
             modelBuilder.Entity("ActorMovie", b =>
