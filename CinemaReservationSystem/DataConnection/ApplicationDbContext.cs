@@ -1,10 +1,11 @@
 ﻿using CinemaReservationSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using CinemaReservationSystem.ViewModel;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CinemaReservationSystem.DataConnection
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {

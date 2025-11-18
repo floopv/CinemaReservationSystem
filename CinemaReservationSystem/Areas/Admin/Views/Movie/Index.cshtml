@@ -5,8 +5,22 @@
 }
 
 <div class="container">
-    <h1>Index</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Movies</h1>
 
+        <div>
+            <a asp-controller="Cinema" asp-action="Index" class="btn btn-primary me-2">
+                Cinemas
+            </a>
+
+            <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">
+                Actors
+            </a>
+            <a asp-controller="Category" asp-action="Index" class="btn btn-secondary">
+                Categories
+            </a>
+        </div>
+    </div>
     <p>
         <a asp-action="Create">Create New</a>
     </p>
@@ -71,11 +85,45 @@
                         @Html.DisplayFor(modelItem => item.Cinema.Name)
                     </td>
                     <td>
-                        <a asp-action="Update" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a asp-action="Update" asp-route-id="@item.Id" >Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".btn-delete");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function (e) {
+                e.preventDefault(); // stop normal navigation
+
+                const url = this.getAttribute("href");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "This action cannot be undone!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                          title: "Deleted!",
+                          text: "Your file has been deleted.",
+                          icon: "success"
+                        });
+
+                        // Redirect to delete URL
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    });
+</script> 

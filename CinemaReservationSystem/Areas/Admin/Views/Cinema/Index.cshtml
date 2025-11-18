@@ -4,8 +4,22 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Cinemas</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Cinemas</h1>
 
+    <div>
+        <a asp-controller="Movie" asp-action="Index" class="btn btn-primary me-2">
+            Movies
+        </a>
+
+        <a asp-controller="Actor" asp-action="Index" class="btn btn-secondary">
+            Actors
+        </a>
+        <a asp-controller="Category" asp-action="Index" class="btn btn-secondary">
+            Categories
+        </a>
+    </div>
+</div>
 <p>
     <a asp-action="Create">Create New</a>
 </p>

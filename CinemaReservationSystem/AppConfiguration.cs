@@ -1,6 +1,7 @@
 ﻿using CinemaReservationSystem.DataConnection;
 using CinemaReservationSystem.Models;
 using CinemaReservationSystem.Repos;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaReservationSystem
@@ -20,6 +21,18 @@ namespace CinemaReservationSystem
             {
                 options.UseSqlServer(connectionString);
             });
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                options =>
+                {
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 6;
+                    options.User.RequireUniqueEmail = true;
+                    //options.SignIn.RequireConfirmedEmail = true;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>();
         }
     }
 }
