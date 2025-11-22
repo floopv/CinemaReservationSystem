@@ -1,7 +1,9 @@
 ﻿using CinemaReservationSystem.DataConnection;
 using CinemaReservationSystem.Models;
 using CinemaReservationSystem.Repos;
+using CinemaReservationSystem.Utilities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaReservationSystem
@@ -10,6 +12,7 @@ namespace CinemaReservationSystem
     {
         public static void Config(this IServiceCollection services , string connectionString)
         {
+            services.AddTransient<IEmailSender , EmailSender>();
             services.AddScoped<IRepository<Actor>, Repository<Actor>>();
             services.AddScoped<IRepository<Category>, Repository<Category>>();
             services.AddScoped<IRepository<Cinema>, Repository<Cinema>>();
@@ -30,8 +33,9 @@ namespace CinemaReservationSystem
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
                     options.User.RequireUniqueEmail = true;
-                    //options.SignIn.RequireConfirmedEmail = true;
+                    options.SignIn.RequireConfirmedEmail = true;
                 })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
         }
     }

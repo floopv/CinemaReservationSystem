@@ -1,0 +1,91 @@
+﻿@model CinemaReservationSystem.ViewModel.LoginVM
+@{
+    ViewData["Title"] = "Login";
+    // Layout = "_AuthLayout";
+}
+
+<div class="row min-vh-100 flex-center g-0">
+    <div class="col-lg-8 col-xxl-5 py-3 position-relative">
+        <div class="card overflow-hidden z-index-1">
+            <div class="card-body p-0">
+                <div class="row g-0 h-100">
+
+                    <!-- Left side -->
+                    <div class="col-md-5 text-center bg-card-gradient">
+                        <div class="position-relative p-4 pt-md-5 pb-md-7 light">
+                            <div class="z-index-1 position-relative">
+                                <a class="link-light mb-4 font-sans-serif fs-4 d-inline-block fw-bolder" href="/">Falcon</a>
+                                <p class="opacity-75 text-white">
+                                    Focus on your work, we'll handle the UI!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-3 mb-4 mt-md-4 mb-md-5 light">
+                            <p class="text-white">
+                                Don't have an account?<br />
+                                <a class="text-decoration-underline link-light" asp-action="Register" asp-controller="Account" asp-area="Identity">Get started!</a>
+
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right side: login form -->
+                    <div class="col-md-7 d-flex flex-center">
+                        <div class="p-4 p-md-5 flex-grow-1">
+                            <h3>Login</h3>
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="mb-3">
+                                    <label asp-for="UserNameOrEmail" class="form-label"></label>
+                                    <input asp-for="UserNameOrEmail" class="form-control" />
+                                    <span asp-validation-for="UserNameOrEmail" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Password" class="form-label"></label>
+                                    <input asp-for="Password" class="form-control" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3 form-check">
+                                    <input asp-for="RememberMe" class="form-check-input" />
+                                    <label asp-for="RememberMe" class="form-check-label"></label>
+                                </div>
+
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary d-block w-100 mt-3">Login</button>
+                                </div>
+                                <div class="mb-3">
+                                    <a class="btn btn-primary d-block w-100 mt-3" asp-action="ResendEmailConfirmation">Resend Confirmation Email</a>
+                                </div>
+
+                                <div class="mb-3">
+                                    <span asp-validation-summary="All" class="text-danger"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    ﻿@if (TempData["Error"] is not null)
+{
+    <script>
+        toastr.error('@TempData["Error"]')
+    </script>
+}
+@if (TempData["Success"] is not null)
+{
+    <script>
+        toastr.success('@TempData["Success"]')
+    </script>
+}
+}
+
+}

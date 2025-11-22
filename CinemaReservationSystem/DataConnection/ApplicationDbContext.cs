@@ -51,5 +51,7 @@ namespace CinemaReservationSystem.DataConnection
                 .WithMany(a => a.ActorMovies)
                 .HasForeignKey(am => am.ActorsId);
         }
+        public DbSet<CinemaReservationSystem.ViewModel.RegisterVM> RegisterVM { get; set; } = default!;
+        public DbSet<CinemaReservationSystem.ViewModel.ResendEmailConfirmationVM> ResendEmailConfirmation { get; set; } = default!;
     }
 }
