@@ -52,7 +52,5 @@ namespace CinemaReservationSystem.DataConnection
                 .WithMany(a => a.ActorMovies)
                 .HasForeignKey(am => am.ActorsId);
         }
-        public DbSet<CinemaReservationSystem.ViewModel.ValidateOTPVM> ValidateOTPVM { get; set; } = default!;
-        public DbSet<CinemaReservationSystem.ViewModel.ResetPasswordVM> ResetPasswordVM { get; set; } = default!;
     }
 }

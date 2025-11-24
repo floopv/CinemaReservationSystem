@@ -9,6 +9,7 @@
         public DateTime ExpireAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsValid { get; set; }
+        public bool IsUsed { get; set; }
         public ApplicationUserOTP()
         {
         }
@@ -20,6 +21,7 @@
             this.ApplicationUserId = ApplicationUserId;
             this.OTP = OTP;
             ExpireAt = CreatedAt.AddMinutes(10);
+            IsUsed = false;
         }
     } 
 }

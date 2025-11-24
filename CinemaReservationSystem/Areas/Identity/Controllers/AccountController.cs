@@ -199,6 +199,13 @@ namespace CinemaReservationSystem.Areas.Identity.Controllers
                 ModelState.AddModelError("", "Confirm your email first");
                 return View(forgetPasswordVM);
             }
+            var userOTPs = await _applicationUserOTPRepository.GetAllAsync(otp => otp.ApplicationUserId == user.Id && otp.IsValid);
+            var last24HrsOTPs = userOTPs.Where(otp => otp.CreatedAt >= DateTime.UtcNow.AddHours(-24));
+            if (last24HrsOTPs.Count() >= 5)
+            {
+                ModelState.AddModelError("", "You have reached the maximum number of OTP requests for today. Please try again later.");
+                return View(forgetPasswordVM);
+            }
             var OTP = new Random().Next(1000, 9999).ToString();
             string htmlMessage = $@"
 <div style='font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;'>
@@ -264,10 +271,30 @@ namespace CinemaReservationSystem.Areas.Identity.Controllers
                 ModelState.AddModelError("", "Invalid OTP");
                 return View(validateOTPVM);
             }
-            return RedirectToAction(nameof(ResetPassword) , new { applicationUserId = user.Id});
+            if  (DateTime.UtcNow > userOTP.ExpireAt)
+            {
+                userOTP.IsValid = false;
+                _applicationUserOTPRepository.Update(userOTP);
+                await _applicationUserOTPRepository.CommitAsync();
+                ModelState.AddModelError("", "OTP Expired");
+                return View(validateOTPVM);
+            }
+            userOTP.IsValid = false;
+            userOTP.IsUsed = true;
+            _applicationUserOTPRepository.Update(userOTP);
+            await _applicationUserOTPRepository.CommitAsync();
+            return RedirectToAction(nameof(ResetPassword) , new { applicationUserId = user.Id , });
         }
-        public IActionResult ResetPassword(string applicationUserId)
+        public async Task<IActionResult> ResetPassword(string applicationUserId)
         {
+            var authorizeToReset = await _applicationUserOTPRepository.GetOneAsync(otp => otp.ApplicationUserId == applicationUserId 
+            && otp.IsUsed);
+            if (authorizeToReset is null)
+            {
+                //ModelState.AddModelError(string.Empty, "You are not authorized to reset password");
+                TempData["unAuthourizedReset"] = "You are not authorized to reset password";
+                return RedirectToAction(nameof(ForgetPassword));
+            }
             return View();
         }
         [HttpPost]
