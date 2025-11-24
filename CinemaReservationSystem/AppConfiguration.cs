@@ -19,6 +19,7 @@ namespace CinemaReservationSystem
             services.AddScoped<IRepository<Movie>, Repository<Movie>>();
             services.AddScoped<IRepository<MovieSubImg>, Repository<MovieSubImg>>();
             services.AddScoped<IRepository<ActorMovie>, Repository<ActorMovie>>();
+            services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {

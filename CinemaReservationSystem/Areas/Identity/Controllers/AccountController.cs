@@ -1,8 +1,10 @@
-﻿using CinemaReservationSystem.ViewModel;
+﻿using CinemaReservationSystem.Models;
+using CinemaReservationSystem.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using System.Threading.Tasks;
 
 namespace CinemaReservationSystem.Areas.Identity.Controllers
@@ -13,12 +15,14 @@ namespace CinemaReservationSystem.Areas.Identity.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IRepository<ApplicationUserOTP> _applicationUserOTPRepository;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, IRepository<ApplicationUserOTP> applicationUserOTPRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _applicationUserOTPRepository = applicationUserOTPRepository;
         }
 
         public IActionResult Index()
@@ -170,6 +174,126 @@ namespace CinemaReservationSystem.Areas.Identity.Controllers
 </div>";
 
             await _emailSender.SendEmailAsync(user.Email, "Cinema Reservation Confirmation Mail", htmlMessage);
+            return RedirectToAction(nameof(Login));
+        }
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordVM forgetPasswordVM)
+        {
+            if (forgetPasswordVM == null)
+            {
+                ModelState.AddModelError("", "Invalid Inputs");
+                return View(forgetPasswordVM);
+            }
+            var user = await _userManager.FindByEmailAsync(forgetPasswordVM.EmailOrUserName) ?? await _userManager.FindByNameAsync(forgetPasswordVM.EmailOrUserName);
+            if (user is null)
+            {
+                ModelState.AddModelError("", "User not found");
+                return View(forgetPasswordVM);
+            }
+            if (!user.EmailConfirmed)
+            {
+                ModelState.AddModelError("", "Confirm your email first");
+                return View(forgetPasswordVM);
+            }
+            var OTP = new Random().Next(1000, 9999).ToString();
+            string htmlMessage = $@"
+<div style='font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 20px;'>
+    <div style='max-width: 600px; margin: auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;'>
+        <div style='background-color: #007bff; color: white; padding: 15px; text-align: center;'>
+            <h2 style='margin: 0;'>Cinema Reservation</h2>
+        </div>
+        <div style='padding: 20px;'>
+            <h3 style='color: #333;'>Reset Password</h3>
+            <p style='color: #555; line-height: 1.6;'>
+                Hi <strong>{user.FirstName}</strong>,<br><br>
+                Thank you for registering with <strong>Cinema Reservation</strong>.<br>
+                Please use the OTP below to reset your password.
+            </p>
+
+            <div style='text-align: center; margin: 30px 0;'>
+                <p
+                   style='color: red; padding: 12px 25px;
+                          text-decoration: none; border-radius: 6px; display: inline-block;'>
+                    {OTP}
+                </p>
+            </div>
+
+            <p style='font-size: 14px; color: #777;'>
+                If you did not request the reset, please ignore this email.
+            </p>
+        </div>
+        <div style='background-color: #f0f0f0; text-align: center; padding: 10px; font-size: 12px; color: #999;'>
+            © 2025 Cinema Reservation. All rights reserved.
+        </div>
+    </div>
+</div>";
+            ApplicationUserOTP applicationUserOTP = new ApplicationUserOTP(user.Id ,OTP);
+            await _applicationUserOTPRepository.AddAsync(applicationUserOTP);
+            await _applicationUserOTPRepository.CommitAsync();
+            await _emailSender.SendEmailAsync(user.Email, "Cinema Reservation Reset Password", htmlMessage);
+            return RedirectToAction(nameof(ValidateOTP) , new {applicationUserId = user.Id});
+        }
+        public IActionResult ValidateOTP(string applicationUserId)
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ValidateOTP(ValidateOTPVM validateOTPVM)
+        {
+            if (validateOTPVM == null)
+            {
+                ModelState.AddModelError("", "Invalid Inputs");
+                return View(validateOTPVM);
+            }
+            var user = await _userManager.FindByIdAsync(validateOTPVM.ApplicationUserId);
+            if (user is null)
+            {
+                ModelState.AddModelError("", "User not found");
+                return View(validateOTPVM);
+            }
+            var userOTP = await _applicationUserOTPRepository.GetOneAsync(otp=> otp.ApplicationUserId == user.Id && 
+            otp.OTP == validateOTPVM.OTP &&
+            otp.IsValid
+            );
+            if (userOTP is null)
+            {
+                ModelState.AddModelError("", "Invalid OTP");
+                return View(validateOTPVM);
+            }
+            return RedirectToAction(nameof(ResetPassword) , new { applicationUserId = user.Id});
+        }
+        public IActionResult ResetPassword(string applicationUserId)
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM resetPasswordVM)
+        {
+            if (resetPasswordVM == null)
+            {
+                ModelState.AddModelError("", "Invalid Inputs");
+                return View(resetPasswordVM);
+            }
+            var user = await _userManager.FindByIdAsync(resetPasswordVM.ApplicationUserId);
+            if (user is null)
+            {
+                ModelState.AddModelError("", "User not found");
+                return View(resetPasswordVM);
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user , token , resetPasswordVM.NewPassword);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(resetPasswordVM);
+            }
             return RedirectToAction(nameof(Login));
         }
         [HttpGet]
