@@ -1,12 +1,16 @@
 ﻿using CinemaReservationSystem.Models;
 using CinemaReservationSystem.Repos;
+using CinemaReservationSystem.Utilities;
 using CinemaReservationSystem.ViewModel;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role} , {ConstantData.Employee_Role}")]
+
     public class CategoryController : Controller
     {
         private readonly IRepository<Category> _categoryRepository;
@@ -42,6 +46,8 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         [HttpGet]
         public async Task<IActionResult> Update (int id)
         {
@@ -53,6 +59,8 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
             var updateCategoryVM = category.Adapt<UpdateCategoryVM>();
             return View(updateCategoryVM);
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         [HttpPost]
         public async Task<IActionResult> Update(UpdateCategoryVM updateCategoryVM)
         {
@@ -71,6 +79,8 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
             await _categoryRepository.CommitAsync();
             return RedirectToAction(nameof(Index)) ;
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _categoryRepository.GetOneAsync(c => c.Id == id);

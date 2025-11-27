@@ -13,7 +13,7 @@ namespace CinemaReservationSystem.Utilities
                 {
                     EnableSsl = true,
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential("philonaeem3@gmail.com", "cjss uapb mdgc gptd")
+                    Credentials = new NetworkCredential("philonaeem3@gmail.com", "luep zncp tmwg pjzu\r\n")
                 };
 
                 return client.SendMailAsync(

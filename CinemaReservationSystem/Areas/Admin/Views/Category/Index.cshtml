@@ -53,11 +53,20 @@
                         @(item.Status ? "Active" : "Inactive")
                     </span>
             </td>
-            <td>
-                <a asp-action="Update" asp-route-id="@item.Id">Edit</a> ||
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete">Delete</a>
-            </td>
-        </tr>
+                @if (User.IsInRole(ConstantData.Super_Admin_Role) || User.IsInRole(ConstantData.Admin_Role))
+                {
+                    <td>
+                        <a asp-action="Update" asp-route-id="@item.Id">Edit</a> ||
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-delete">Delete</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <span>N/A</span>
+                    </td>
+                }
+            </tr>
 }
     </tbody>
 </table>

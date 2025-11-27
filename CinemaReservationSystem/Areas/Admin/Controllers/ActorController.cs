@@ -1,11 +1,15 @@
 ﻿
 
+using CinemaReservationSystem.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace ActorReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role} , {ConstantData.Employee_Role}")]
+
     public class ActorController : Controller
     {
 
@@ -55,6 +59,8 @@ namespace ActorReservationSystem.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
@@ -67,6 +73,8 @@ namespace ActorReservationSystem.Areas.Admin.Controllers
             updateActorVM.Img = actor.Img;
             return View(updateActorVM);
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         [HttpPost]
         public async Task<IActionResult> Update(UpdateActorVM updateActorVM)
         {
@@ -111,6 +119,8 @@ namespace ActorReservationSystem.Areas.Admin.Controllers
             await _actorRepository.CommitAsync();
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var actor = await _actorRepository.GetOneAsync(c => c.Id == id);

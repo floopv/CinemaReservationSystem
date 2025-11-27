@@ -1,4 +1,6 @@
-﻿using CinemaReservationSystem.ViewModel;
+﻿using CinemaReservationSystem.Utilities;
+using CinemaReservationSystem.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Data.OleDb;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 namespace CinemaReservationSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role} , {ConstantData.Employee_Role}")]
     public class MovieController : Controller
     {
         private readonly IRepository<Movie> _movieRepository;
@@ -117,6 +120,8 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
@@ -145,6 +150,8 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
             };
             return View(updateMovieVM);
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         [HttpPost]
         public async Task<IActionResult> Update(UpdateMovieVM updateMovieVM)
         {
@@ -258,6 +265,8 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         public async Task<IActionResult> DeleteSubImage(int? movieId, string? img)
         {
             if (movieId is not null && img is not null)
@@ -276,6 +285,8 @@ namespace CinemaReservationSystem.Areas.Admin.Controllers
             }
             return RedirectToAction(nameof(Update), nameof(Movie), new { id = movieId });
         }
+        [Authorize(Roles = $"{ConstantData.Super_Admin_Role} , {ConstantData.Admin_Role}")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var movie = await _movieRepository.GetOneAsync(expression: m => m.Id == id,
