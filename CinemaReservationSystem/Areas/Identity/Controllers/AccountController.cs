@@ -363,5 +363,10 @@ namespace CinemaReservationSystem.Areas.Identity.Controllers
             }
             return RedirectToAction("Index", "Home", new { area = "Customer" });
         }
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index" , "Home" , new {area = "Customer"});
+        }
     }
 }

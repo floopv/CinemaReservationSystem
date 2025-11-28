@@ -234,7 +234,7 @@
                                 <label class="mb-0 py-2 theme-switch-toggle-dark d-lg-none" for="themeControlToggle"><span>Switch to dark theme</span></label>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
+                        @* <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdownLogin" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
                             <div class="dropdown-menu dropdown-caret dropdown-menu-end dropdown-menu-card" aria-labelledby="navbarDropdownLogin">
                                 <div class="card shadow-none navbar-card-login">
@@ -244,10 +244,10 @@
                                                 <h5 class="mb-0">Log in</h5>
                                             </div>
                                             <div class="col-auto">
-                                                <p class="fs--1 text-600 mb-0">or <a href="../pages/authentication/simple/register.html">Create an account</a></p>
+                                                <p class="fs--1 text-600 mb-0">or <a href="/Identity/Account/Register">Create an account</a></p>
                                             </div>
                                         </div>
-                                        <form>
+                                        <form asp-action="Login">
                                             <div class="mb-3">
                                                 <input class="form-control" type="email" placeholder="Email address" />
                                             </div>
@@ -261,7 +261,7 @@
                                                         <label class="form-check-label mb-0" for="modal-checkbox">Remember me</label>
                                                     </div>
                                                 </div>
-                                                <div class="col-auto"><a class="fs--1" href="../pages/authentication/simple/forgot-password.html">Forgot Password?</a></div>
+                                                <div class="col-auto"><a class="fs--1" href="/Identity/Account/ForgetPassword">Forgot Password?</a></div>
                                             </div>
                                             <div class="mb-3">
                                                 <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Log in</button>
@@ -278,8 +278,18 @@
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="#!" data-bs-toggle="modal" data-bs-target="#exampleModal">Register</a></li>
+                        </li> *@
+                        @* <li class="nav-item"><a class="nav-link" href="/Identity/Account/Register" data-bs-toggle="modal" data-bs-target="#exampleModal">Register</a></li> *@
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item"><a class="nav-link" href="/Identity/Account/Login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Identity/Account/Register">Register</a></li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" href="/Identity/Account/Logout">Logout</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/Identity/Profile/Index">Welcome @User.Identity.Name </a></li>
+                        }
                     </ul>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+using CinemaReservationSystem.Configurations;
 using CinemaReservationSystem.Models;
 using CinemaReservationSystem.Repos;
 using CinemaReservationSystem.Utilities;
@@ -18,6 +19,7 @@ namespace CinemaReservationSystem
                   + "'DefaultConnection' not found.");
 
             builder.Services.Config(connectionString);
+            builder.Services.RegisterMappings();
 
             var app = builder.Build();
 
@@ -45,7 +47,7 @@ namespace CinemaReservationSystem
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{area=Admin}/{controller=Movie}/{action=Index}/{id?}");
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

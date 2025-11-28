@@ -1,15 +1,15 @@
 ﻿@using CinemaReservationSystem.Models
-@model IEnumerable<Actor>
+@model IEnumerable<Movie>
 
 
 <div class="container">
     <div class="row mb-3 align-items-center my-3">
         <div class="col-md-6">
-            @* <div>@Context.Request.Cookies["LastAddedActor"]</div> *@
-            <h2 class="display-6">All Actors</h2>
+            @* <div>@Context.Request.Cookies["LastAddedMovie"]</div> *@
+            <h2 class="display-6">All Movies</h2>
         </div>
         <div class="col-md-6 text-md-end text-start mt-2 mt-md-0">
-            <a href="/Admin/Actor/Create" class="btn btn-success">Create</a>
+            @* <a href="/Admin/Movie/Create" class="btn btn-success">Create</a> *@
         </div>
     </div>
 
@@ -27,21 +27,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var Actor in Model)
+                    @foreach (var movie in Model)
                     {
                         <tr>
-                            <th scope="row">@Actor.Id</th>
-                            <td>@Actor.Name</td>
+                            <th scope="row">@movie.Id</th>
+                            <td>@movie.Name</td>
                             <td>
-                                <img src="~/Imgs/Actors/@Actor.Img" width="100" />
+                                <img src="~/Imgs/Movies/@movie.MainImg" width="100" />
                             </td>
                             <td>
-                                @Actor.Bio
+                                @movie.Description
                             </td>
-                            <td>
-                                <a href="/Admin/Actor/Update/@Actor.Id" type="button" class="btn btn-warning">Edit</a>
-                                <a href="/Admin/Actor/Delete/@Actor.Id" class="btn btn-danger btn-delete">Delete</a>
-                            </td>
+                            @if (User.IsInRole(ConstantData.Super_Admin_Role) || User.IsInRole(ConstantData.Admin_Role))
+                            {
+                                <td>
+                                    <a href="/Admin/Movie/Update/@movie.Id" type="button" class="btn btn-warning">Edit</a>
+                                    <a href="/Admin/Movie/Delete/@movie.Id" class="btn btn-danger btn-delete">Delete</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    N/A
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>

@@ -9,22 +9,24 @@ using System.Threading.Tasks;
 namespace CinemaReservationSystem.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
-        IRepository<Actor> _actorRepository; //= new Repository<Brand>();
-        public HomeController(IRepository<Actor> actorRepository)
+        IRepository<Movie> _MovieRepository; //= new Repository<Brand>();
+
+        public HomeController(IRepository<Movie> movieRepository)
         {
-            _actorRepository = actorRepository;
+            _MovieRepository = movieRepository;
         }
+
         //private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
-        
+
         public async Task<IActionResult> Index()
         {
-          var actors = await _actorRepository.GetAllAsync();
+          var movies = await _MovieRepository.GetAllAsync();
             //var actors = _db.Actors.AsEnumerable();
-            return View(actors.AsEnumerable());
+            return View(movies.AsEnumerable());
         }
     }
 }
