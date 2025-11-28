@@ -26,6 +26,7 @@ namespace CinemaReservationSystem
             {
                 options.UseSqlServer(connectionString);
             });
+
             services.AddIdentity<ApplicationUser, IdentityRole>(
                 options =>
                 {
@@ -39,6 +40,13 @@ namespace CinemaReservationSystem
                 })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            });
         }
     }
 }

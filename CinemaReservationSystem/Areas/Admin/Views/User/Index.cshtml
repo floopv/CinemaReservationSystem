@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ApplicationUser>
+
+
+<div class="container">
+    <div class="row mb-3 align-items-center my-3">
+        <div class="col-md-6">
+            <h2 class="display-6">All Users</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td scope="row">@user.Id</td>
+                            <td scope="row">@user.FirstName @user.LastName</td>
+                            <td scope="row">@user.UserName</td>
+                            <td scope="row">@user.Email</td>
+                            <td scope="row">
+                                @if(user.LockoutEnd != null && user.LockoutEnd > DateTime.UtcNow)
+                                { 
+                                  <a href="/Admin/User/LockUnLock/@user.Id" type="button" class="btn btn-success">UnLock</a>
+                                }
+                                else
+                                {                                    
+                                 <a href="/Admin/User/LockUnLock/@user.Id" type="button" class="btn btn-danger">Lock</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    ﻿@if (TempData["Error"] is not null)
+{
+    <script>
+        toastr.error('@TempData["Error"]')
+    </script>
+}
+@if (TempData["Success"] is not null)
+{
+    <script>
+        toastr.success('@TempData["Success"]')
+    </script>
+}
+}
+
+
