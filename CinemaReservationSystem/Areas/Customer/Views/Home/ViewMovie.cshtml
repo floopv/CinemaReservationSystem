@@ -1,0 +1,67 @@
+﻿@model MovieWithRelatedMoviesVM
+
+@{
+    Layout = "_MovieLayout";
+}
+
+<!-- Product section-->
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="~/Imgs/Movies/@Model.Movie.MainImg" alt="..." /></div>
+            <div class="col-md-6">
+                <div class="small mb-1">@Model.Movie.Category.Name</div>
+                <h1 class="display-5 fw-bolder">@Model.Movie.Name</h1>
+                <div class="fs-5 mb-5">
+                    <span>@Model.Movie.Cinema.Name</span>
+                    <span>$@Model.Movie.Price</span>
+                </div>
+                <p class="lead">@Model.Movie.Description</p>
+                <p>Released On: @Model.Movie.ReleaseDate</p>
+                <div class="d-flex">
+                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        <i class="bi-ticket-fill me-1"></i>
+                        Book a Ticket
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related items section-->
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Related Movies</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach(var movie in Model.RelatedMovies)
+            {
+                <div class="col mb-5">
+                <div class="card h-100">
+                    <!-- Product image-->
+                    <img class="card-img-top" src="~/Imgs/Movies/@movie.MainImg" alt="..." />
+                    <!-- Product details-->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name-->
+                            <h5 class="fw-bolder">@movie.Name</h5>
+                            <!-- Product reviews-->
+                            <div class="d-flex justify-content-center small text mb-2">
+                                @movie.ReleaseDate
+                            </div>
+                            <!-- Product price-->
+                            <span>$@movie.Price</span>
+                        </div>
+                    </div>
+                    <!-- Product actions-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/Customer/Home/ViewMovie/@movie.Id">View Movie</a></div>
+                    </div>
+                </div>
+            </div>
+            
+            }
+            </div>
+            
+        </div>
+</section>

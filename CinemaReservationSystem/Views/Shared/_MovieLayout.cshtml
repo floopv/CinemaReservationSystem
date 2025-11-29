@@ -1,0 +1,90 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title - Movies</title>
+
+    <!-- Falcon Core CSS -->
+    <link href="~/assets/css/theme.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons (optional for shop/movie templates) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom patch for integration -->
+    <style>
+        body {
+            background-color: #f8f9fa !important;
+        }
+
+        .main-container {
+            padding-top: 6rem; /* Space below navbar */
+        }
+
+        .navbar {
+            box-shadow: 0px 2px 8px rgba(0,0,0,.05);
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 40px 0;
+            background: #fff;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Falcon Navbar -->
+    <nav class="navbar navbar-light navbar-glass navbar-top navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/Customer/Home">
+                Falcon Movies
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMovies">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse scrollbar" id="navbarMovies">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/Customer/Home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Customer/Home">Movies</a></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/Identity/Account/Login">Login</a></li>
+                            <li><a class="dropdown-item" href="/Identity/Account/Register">Register</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MOVIE CONTENT AREA -->
+    <main class="main-container container">
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        Copyright © @DateTime.Now.Year Falcon Movies
+    </footer>
+
+    <!-- Falcon JS + Bootstrap -->
+    <script src="~/assets/js/theme.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

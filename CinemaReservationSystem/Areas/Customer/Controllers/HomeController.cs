@@ -28,5 +28,21 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
             //var actors = _db.Actors.AsEnumerable();
             return View(movies.AsEnumerable());
         }
+        public async Task<IActionResult> ViewMovie(int id)
+        {
+            var movie = await _MovieRepository.GetOneAsync(m=>m.Id == id , [m=>m.Category , m=>m.Cinema]);
+            if(movie == null)
+            {
+               return NotFound();
+            }
+            var relatedMovies = await _MovieRepository.GetAllAsync(m => m.CategoryId
+            == movie.CategoryId && m.Id != movie.Id);
+            var viewModel = new MovieWithRelatedMoviesVM
+            {
+                Movie = movie,
+                RelatedMovies = relatedMovies.AsEnumerable()
+            };
+            return View(viewModel);
+        }
     }
 }
