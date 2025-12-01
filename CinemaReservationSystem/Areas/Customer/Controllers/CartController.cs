@@ -12,15 +12,17 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
         private readonly IRepository<Cart> _cartRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IRepository<Movie> _movieRepository;
+        private readonly IRepository<Promotion> _promotionRepository;
 
-        public CartController(IRepository<Cart> cartRepository, UserManager<ApplicationUser> userManager, IRepository<Movie> movieRepository)
+        public CartController(IRepository<Cart> cartRepository, UserManager<ApplicationUser> userManager, IRepository<Movie> movieRepository, IRepository<Promotion> promotionRepository)
         {
             _cartRepository = cartRepository;
             _userManager = userManager;
             _movieRepository = movieRepository;
+            _promotionRepository = promotionRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? code = null)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -28,6 +30,41 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
                 return RedirectToAction("Login", "Account", new { area = "Identity" });
             }
             var cartItems = await _cartRepository.GetAllAsync(c => c.ApplicationUserId == user.Id, [m=>m.Movie]);
+            if (code != null)
+            {
+                var promotion = await _promotionRepository.GetOneAsync(p => p.Code == code);
+                if (promotion != null)
+                {
+                    if(promotion.IsValid && promotion.ExpiryDate > DateTime.UtcNow && promotion.MaxUsage > 0)
+                    {
+                       var movieInCart = cartItems.FirstOrDefault(c => c.MovieId == promotion.MovieId);
+                        if (movieInCart != null)
+                        {
+                            movieInCart.Price -= movieInCart.Price * ( promotion.Discount / 100);
+                            promotion.MaxUsage--;
+                            if (promotion.MaxUsage == 0)
+                            {
+                                promotion.IsValid = false;
+                            }
+                            _promotionRepository.Update(promotion);
+                            await _promotionRepository.CommitAsync();
+                            TempData["Success"] = "Promotion code applied successfully.";
+                        }
+                        else
+                        {
+                            TempData["Error"] = "Promotion code is not applicable to any movie in your cart.";
+                        }
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Promotion code is expired or invalid.";
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = "Invalid promotion code.";
+                }
+            }
             return View(cartItems);
         }
         public async Task<IActionResult> AddToCart(int MovieId , int Count)

@@ -18,6 +18,7 @@ namespace CinemaReservationSystem.DataConnection
         public DbSet<ActorMovie> ActorMovie { get; set; }
         public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder.UseSqlServer ("Data Source=FLOOPV\\SQLEXPRESS;initial catalog = CinemaReservationSystem ;Integrated Security=True;" +

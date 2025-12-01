@@ -72,16 +72,18 @@
                     </div>
                 }
 
-                <!-- Discount -->
-                <div class="card mb-4">
-                    <div class="card-body p-4 d-flex flex-row">
-                        <div class="form-outline flex-fill">
-                            <input type="text" id="form1" class="form-control form-control-lg" />
-                            <label class="form-label" for="form1">Promo Code</label>
+                <form asp-action="Index">
+                    <!-- Discount -->
+                    <div class="card mb-4">
+                        <div class="card-body p-4 d-flex flex-row">
+                            <div class="form-outline flex-fill">
+                                <input type="text" name="code" id="form1" class="form-control form-control-lg" />
+                                <label class="form-label" for="form1">Promo Code</label>
+                            </div>
+                            <button type="submit" class="btn btn-outline-warning btn-lg ms-3">Apply</button>
                         </div>
-                        <button type="button" class="btn btn-outline-warning btn-lg ms-3">Apply</button>
                     </div>
-                </div>
+                   </form>
 
                 <!-- PAY BUTTON -->
                 <div class="card">
@@ -96,3 +98,17 @@
         </div>
     </div>
 </section>
+@section Scripts {
+    ﻿@if (TempData["Error"] is not null)
+{
+    <script>
+        toastr.error('@TempData["Error"]')
+    </script>
+}
+@if (TempData["Success"] is not null)
+{
+    <script>
+        toastr.success('@TempData["Success"]')
+    </script>
+}
+}
