@@ -73,8 +73,17 @@
                             Account
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/Identity/Account/Login">Login</a></li>
-                            <li><a class="dropdown-item" href="/Identity/Account/Register">Register</a></li>
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <li><a class="dropdown-item" href="/Identity/Account/Login">Login</a></li>
+                                <li><a class="dropdown-item" href="/Identity/Account/Register">Register</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" href="/Identity/Account/Logout">Logout</a></li>
+
+                            }
+
                         </ul>
                     </li>
 
