@@ -78,6 +78,8 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
                     TempData["Error"] = "Invalid promotion code.";
                 }
             }
+             var totalAmount = cartItems.Sum(c => c.Count * c.Price);
+ ViewBag.TotalAmount = totalAmount;
             return View(cartItems);
         }
         public async Task<IActionResult> AddToCart(int MovieId , int Count)
