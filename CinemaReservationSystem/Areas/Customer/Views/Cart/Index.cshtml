@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Cart>
+
+@{
+    Layout = "_MovieLayout";
+}
+<section>
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-10">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-normal mb-0">Your Tickets</h3>
+                </div>
+
+                @foreach(var item in Model)
+                {
+                    <!-- CART ITEM -->
+                    <div class="card rounded-3 mb-4">
+                        <div class="card-body p-4">
+                            <div class="row d-flex justify-content-between align-items-center">
+
+                                <!-- Movie Poster -->
+                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                    <img src="~/Imgs/Movies/@item.Movie.MainImg"
+                                         class="img-fluid rounded-3" alt="Movie Poster">
+                                </div>
+
+                                <!-- Movie Info -->
+                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                    <p class="lead fw-bold mb-2">@item.Movie.Name</p>
+                                    <p class="mb-0">
+                                        <span class="text-muted">Release Date: @item.Movie.ReleaseDate</span> <br>
+                                        <span class="text-muted">Seats: </span> A5, A6, A7
+                                    </p>
+                                </div>
+
+                                <!-- Quantity -->
+
+
+                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                    <a asp-action="DecrementMovie" asp-route-movieId="@item.Movie.Id" class="btn btn-link px-2"
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                        <i class="fas fa-minus"></i>
+                                    </a>
+
+                                    <input id="form1"
+                                           min="0"
+                                           name="Count"
+                                           value="@item.Count"
+                                           type="number"
+                                           style="width:80px; padding:5px; color:black;" readonly />
+
+
+                                    <a asp-action="IncrementMovie" asp-route-movieId="@item.Movie.Id" class="btn btn-link px-2"
+                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                    <h5 class="mb-0">$@item.Price</h5>
+                                </div>
+
+                                <!-- Remove -->
+                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                    <a asp-action="DeleteMovie" asp-route-movieId="@item.Movie.Id" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <!-- Discount -->
+                <div class="card mb-4">
+                    <div class="card-body p-4 d-flex flex-row">
+                        <div class="form-outline flex-fill">
+                            <input type="text" id="form1" class="form-control form-control-lg" />
+                            <label class="form-label" for="form1">Promo Code</label>
+                        </div>
+                        <button type="button" class="btn btn-outline-warning btn-lg ms-3">Apply</button>
+                    </div>
+                </div>
+
+                <!-- PAY BUTTON -->
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" class="btn btn-warning btn-block btn-lg">
+                            Proceed to Payment
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

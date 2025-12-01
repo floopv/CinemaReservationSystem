@@ -23,11 +23,11 @@ namespace CinemaReservationSystem
 
             var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-                dbInitializer.Initialize();
-            }
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+            //    dbInitializer.Initialize();
+            //}
 
 
                 // Configure the HTTP request pipeline.

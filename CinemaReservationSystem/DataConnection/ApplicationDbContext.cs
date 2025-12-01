@@ -17,6 +17,7 @@ namespace CinemaReservationSystem.DataConnection
         public DbSet<MovieSubImg> MovieSubImgs { get; set; }
         public DbSet<ActorMovie> ActorMovie { get; set; }
         public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder.UseSqlServer ("Data Source=FLOOPV\\SQLEXPRESS;initial catalog = CinemaReservationSystem ;Integrated Security=True;" +
@@ -51,6 +52,9 @@ namespace CinemaReservationSystem.DataConnection
                 .HasOne(am => am.Actor)
                 .WithMany(a => a.ActorMovies)
                 .HasForeignKey(am => am.ActorsId);
+
+            modelBuilder.Entity<Cart>()
+                .HasKey(c => new { c.ApplicationUserId, c.MovieId });
         }
     }
 }

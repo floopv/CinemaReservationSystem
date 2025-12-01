@@ -18,13 +18,16 @@
                 </div>
                 <p class="lead">@Model.Movie.Description</p>
                 <p>Released On: @Model.Movie.ReleaseDate</p>
-                <div class="d-flex">
-                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                    <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                <form asp-action="AddToCart" asp-controller="Cart" method="post">
+                    <div class="d-flex">
+                    <input name="Count" class="form-control text-center me-3" id="inputQuantity" type="number" value="1" style="max-width: 5rem" />
+                    <input name="MovieId" hidden value="@Model.Movie.Id"/>
+                    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                         <i class="bi-ticket-fill me-1"></i>
                         Book a Ticket
                     </button>
                 </div>
+                    </form>
             </div>
         </div>
     </div>
