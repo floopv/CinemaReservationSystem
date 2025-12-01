@@ -68,15 +68,24 @@
                     <li class="nav-item"><a class="nav-link" href="/Customer/Home">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/Customer/Home">Movies</a></li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            Account
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/Identity/Account/Login">Login</a></li>
-                            <li><a class="dropdown-item" href="/Identity/Account/Register">Register</a></li>
-                        </ul>
-                    </li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+        Account
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <li><a class="dropdown-item" href="/Identity/Account/Login">Login</a></li>
+            <li><a class="dropdown-item" href="/Identity/Account/Register">Register</a></li>
+        }
+        else
+        {
+            <li><a class="dropdown-item" href="/Identity/Account/Logout">Logout</a></li>
+
+        }
+
+    </ul>
+</li>
 
                 </ul>
             </div>
