@@ -19,6 +19,7 @@ namespace CinemaReservationSystem.DataConnection
         public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<ApplicationUserPromotionCode> ApplicationUserPromotionCodes { get; set; }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder.UseSqlServer ("Data Source=FLOOPV\\SQLEXPRESS;initial catalog = CinemaReservationSystem ;Integrated Security=True;" +
@@ -56,6 +57,7 @@ namespace CinemaReservationSystem.DataConnection
 
             modelBuilder.Entity<Cart>()
                 .HasKey(c => new { c.ApplicationUserId, c.MovieId });
+            modelBuilder.Entity<ApplicationUserPromotionCode>().HasKey(c => new { c.ApplicationUserId, c.PromotionCodeId });
         }
     }
 }

@@ -22,6 +22,7 @@ namespace CinemaReservationSystem
             services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
             services.AddScoped<IRepository<Cart>, Repository<Cart>>();
             services.AddScoped<IRepository<Promotion>, Repository<Promotion>>();
+            services.AddScoped<IRepository<ApplicationUserPromotionCode>, Repository<ApplicationUserPromotionCode>>();
             services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddDbContext<ApplicationDbContext>(options =>

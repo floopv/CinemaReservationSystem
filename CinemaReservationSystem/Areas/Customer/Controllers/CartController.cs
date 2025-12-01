@@ -13,13 +13,15 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IRepository<Movie> _movieRepository;
         private readonly IRepository<Promotion> _promotionRepository;
+        private readonly IRepository<ApplicationUserPromotionCode> _applicationUserPromotionCodeRepository;
 
-        public CartController(IRepository<Cart> cartRepository, UserManager<ApplicationUser> userManager, IRepository<Movie> movieRepository, IRepository<Promotion> promotionRepository)
+        public CartController(IRepository<Cart> cartRepository, UserManager<ApplicationUser> userManager, IRepository<Movie> movieRepository, IRepository<Promotion> promotionRepository, IRepository<ApplicationUserPromotionCode> applicationUserPromotionCodeRepository)
         {
             _cartRepository = cartRepository;
             _userManager = userManager;
             _movieRepository = movieRepository;
             _promotionRepository = promotionRepository;
+            _applicationUserPromotionCodeRepository = applicationUserPromotionCodeRepository;
         }
 
         public async Task<IActionResult> Index(string? code = null)
@@ -40,6 +42,12 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
                        var movieInCart = cartItems.FirstOrDefault(c => c.MovieId == promotion.MovieId);
                         if (movieInCart != null)
                         {
+                            var alreadyUsed = await _applicationUserPromotionCodeRepository.GetOneAsync(apc => apc.ApplicationUserId == user.Id && apc.PromotionCodeId == promotion.Id);
+                            if (alreadyUsed != null)
+                            {
+                                TempData["Error"] = "You have already used this promotion code.";
+                                return View(cartItems);
+                            }
                             movieInCart.Price -= movieInCart.Price * ( promotion.Discount / 100);
                             promotion.MaxUsage--;
                             if (promotion.MaxUsage == 0)
@@ -47,6 +55,11 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
                                 promotion.IsValid = false;
                             }
                             _promotionRepository.Update(promotion);
+                            await _applicationUserPromotionCodeRepository.AddAsync(new ApplicationUserPromotionCode()
+                            {
+                                ApplicationUserId = user.Id ,
+                                PromotionCodeId = promotion.Id
+                            });
                             await _promotionRepository.CommitAsync();
                             TempData["Success"] = "Promotion code applied successfully.";
                         }
