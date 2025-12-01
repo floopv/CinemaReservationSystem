@@ -2,7 +2,6 @@ using CinemaReservationSystem.Configurations;
 using CinemaReservationSystem.Models;
 using CinemaReservationSystem.Repos;
 using CinemaReservationSystem.Utilities;
-using Stripe;
 
 namespace CinemaReservationSystem
 {
@@ -21,9 +20,6 @@ namespace CinemaReservationSystem
 
             builder.Services.Config(connectionString);
             builder.Services.RegisterMappings();
-
-            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
-            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             var app = builder.Build();
 
