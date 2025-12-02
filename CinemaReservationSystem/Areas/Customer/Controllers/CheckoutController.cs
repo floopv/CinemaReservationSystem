@@ -2,6 +2,7 @@
 
 namespace CinemaReservationSystem.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class CheckoutController : Controller
     {
         public IActionResult Index()
