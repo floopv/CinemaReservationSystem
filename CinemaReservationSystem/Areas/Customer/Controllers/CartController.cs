@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.BillingPortal;
+using Stripe.Checkout;
+using Stripe;
 using System.Threading.Tasks;
 
 namespace CinemaReservationSystem.Areas.Customer.Controllers
@@ -78,6 +81,8 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
                     TempData["Error"] = "Invalid promotion code.";
                 }
             }
+            var totalAmount = cartItems.Sum(c => c.Price * c.Count);
+            ViewBag.TotalAmount = totalAmount;
             return View(cartItems);
         }
         public async Task<IActionResult> AddToCart(int MovieId , int Count)
@@ -167,5 +172,7 @@ namespace CinemaReservationSystem.Areas.Customer.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        
+
     }
 }
